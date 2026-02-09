@@ -1,13 +1,12 @@
 import React from "react";
 import Header from "../Header/header";
+import Categories from "../Header/category";
 
 const Body = () => {
   return (
-    <div className="min-h-screen bg-red-50">
+    <div>
       <Header />
-      <div className="mx-auto max-w-6xl px-4 py-10 text-red-900">
-        Body
-      </div>
+      <Categories />
     </div>
   );
 };
