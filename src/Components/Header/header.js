@@ -1,7 +1,36 @@
+import { useState, useEffect } from "react";
 import CartIcon from "./Carticon";
 import SearchBtn from "./SearchBtn.js";
 
 const Header = () => {
+  const products = [
+    "facewash",
+    "diaper",
+    "shampoo",
+    "soap",
+    "wipes",
+    "laptop",
+    "phone",
+    "shirt",
+    "book",
+  ];
+
+  const [placeholder, setPlaceholder] = useState("Search for facewash");
+
+  useEffect(() => {
+    // Set initial random placeholder
+    const randomIndex = Math.floor(Math.random() * products.length);
+    setPlaceholder(`Search for ${products[randomIndex]}`);
+
+    // Change placeholder every 4 seconds
+    const interval = setInterval(() => {
+      const newRandomIndex = Math.floor(Math.random() * products.length);
+      setPlaceholder(`Search for ${products[newRandomIndex]}`);
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <header className="flex items-center justify-between px-6 py-6 border-b">
       {/* Logo */}
@@ -11,7 +40,7 @@ const Header = () => {
       <div className="flex-1 max-w-lg mx-6 relative">
         <input
           className="w-full h-10 rounded-xl border px-4 pr-10 text-sm"
-          placeholder="Search products..."
+          placeholder={placeholder}
         />
 
         <SearchBtn />

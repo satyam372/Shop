@@ -21,3 +21,25 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 export const auth = getAuth(app);
+
+// https://github.com/settings/connections/applications/89cf50f02ac6aaed3484
+
+
+// ├── store/
+// │   ├── index.js (configure store)
+// │   ├── slices/
+// │   │   ├── cartSlice.js
+// │   │   ├── authSlice.js
+// │   │   ├── categorySlice.js
+// │   │   └── uiSlice.js
+// │   └── hooks/
+// │       └── useAppDispatch.js (optional custom hooks)
+// ├── services/
+// │   ├── productService.js (API calls for products)
+// │   ├── authService.js (Firebase auth)
+// │   └── categoryService.js (API calls for categories)
+// ├── Components/
+// │   ├── Cart/ (uses Redux)
+// │   ├── Profile/ (uses Redux)
+// │   ├── Products/ (uses API directly)
+// │   └── ...

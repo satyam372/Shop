@@ -1,12 +1,16 @@
 import React from "react";
-import Header from "../Header/header";
 import Categories from "../Header/category";
+import Banner from "./Banner";
+import AllProduct from "../Products/AllProduct";
+import HomePageDisplayCard from "./HomePageDisplayCard";
 
 const Body = () => {
   return (
     <div>
-      <Header />
       <Categories />
+      <Banner />
+      <AllProduct />
+      <HomePageDisplayCard />
     </div>
   );
 };
