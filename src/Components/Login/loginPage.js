@@ -25,27 +25,22 @@ const LoginPage = () => {
           {
             size: "invisible",
             callback: (response) => {
-              console.log("reCAPTCHA verified");
+              console.log("reCAPTCHA verified:", response);
             },
             "expired-callback": () => {
               console.log("reCAPTCHA expired");
             },
+            "error-callback": () => {
+              console.error("reCAPTCHA error");
+            },
           },
         );
-        // Render the widget and store its id so we can reset later
-        window.recaptchaVerifier
-          .render()
-          .then((widgetId) => {
-            window.recaptchaWidgetId = widgetId;
-          })
-          .catch((err) => {
-            console.warn("reCAPTCHA render failed:", err);
-          });
+        console.log("reCAPTCHA verifier initialized");
       } catch (err) {
         console.error("reCAPTCHA initialization error:", err);
       }
     }
-  }, []);
+  }, [step]);
 
   // Send OTP via Firebase
   const sendOtp = async (e) => {
@@ -62,7 +57,7 @@ const LoginPage = () => {
     setLoading(true);
 
     try {
-      const phoneWithCountry = phone.startsWith("+") ? phone : `+1${cleaned}`;
+      const phoneWithCountry = phone.startsWith("+") ? phone : `+91${cleaned}`;
 
       // Call Firebase signInWithPhoneNumber
       const result = await signInWithPhoneNumber(
@@ -78,27 +73,15 @@ const LoginPage = () => {
       console.error("Error sending OTP:", err);
       setError(err.message || "Failed to send OTP. Please try again.");
 
-      // Reset reCAPTCHA on error
-      if (window.grecaptcha && window.recaptchaWidgetId != null) {
+      // Dispose and reinitialize reCAPTCHA on error
+      if (window.recaptchaVerifier) {
         try {
-          window.grecaptcha.reset(window.recaptchaWidgetId);
+          window.recaptchaVerifier.clear();
+          window.recaptchaVerifier = null;
         } catch (resetErr) {
-          console.warn("grecaptcha.reset failed:", resetErr);
+          console.warn("reCAPTCHA clear failed:", resetErr);
+          window.recaptchaVerifier = null;
         }
-      } else if (window.recaptchaVerifier && window.recaptchaVerifier.render) {
-        // render may return widget id; try to reset via grecaptcha once available
-        window.recaptchaVerifier
-          .render()
-          .then((widgetId) => {
-            if (window.grecaptcha && widgetId != null) {
-              try {
-                window.grecaptcha.reset(widgetId);
-              } catch (resetErr) {
-                console.warn("grecaptcha.reset failed:", resetErr);
-              }
-            }
-          })
-          .catch(() => {});
       }
     } finally {
       setLoading(false);
